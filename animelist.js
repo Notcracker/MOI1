@@ -14,6 +14,7 @@ var START_URL = null;
 var url = null;
 var baseUrl = null;
 var animelist = express.Router();
+var m = null;
 
 animelist.use(bodyParser.json());
 animelist.route('/')
@@ -30,21 +31,37 @@ animelist.route('/')
 			MongoClient.connect(urldb,function(err,db){
 				assert.equal(err,null);
 				console.log('Connected correctly to server');
-
+				
 				var collection = db.collection('mally');
-				collection.insert(obj, function(err, result) {
-						assert.equal(err,null);	
-						console.timeEnd('function');	
-						
-						var name = req.body.userName;
-						collection.find({'userName':req.body.userName}).toArray(function(err,obj){
-							if (err) throw err;
-							res.end(JSON.stringify(obj[0]));
-							db.close();
-							
-						});
-							
-					});
+
+					collection.find({'userName':req.body.userName}).toArray(function(err,arrra){
+						assert.equal(err,null);
+						console.log('VOID!');
+									if(!arrra[0]){
+
+											collection.insert(obj, function(err, result) {
+													assert.equal(err,null);		
+													
+													var name = req.body.userName;
+													collection.find({'userName':req.body.userName}).toArray(function(err,obj){
+														if (err) throw err;
+														console.log('New user has been created!');
+														console.timeEnd('function');
+														res.end(JSON.stringify(obj[0]));
+														db.close();
+														
+													});
+														
+												});
+											} else{
+												if (err) throw err;
+												console.log('Already exist!');
+												console.timeEnd('function');
+												res.end(JSON.stringify(arrra[0]));
+												db.close();
+									};
+
+								});
 			});
 		});
 
@@ -76,6 +93,7 @@ function visitPage(url) {
 						 var userId = $('user_id').text();
 						 obj.userName= userName;
 						 obj._id = userId;
+						 m = userId;
 						 obj['anime']=[];
 						 $('anime').each(function(i, element){
 						 	var id = $(this).children('series_animedb_id');
@@ -90,7 +108,7 @@ function visitPage(url) {
 							 	});}
 						 	if ((Number($(this).children('my_score').text()))!==0){
 								meanScore = Number($(this).children('my_score').text()) + meanScore;
-								console.log(meanScore);
+								//console.log(meanScore);
 								L = L+1;
 							}
 
@@ -115,7 +133,7 @@ function GetStats(obj) {
 				var l = 0;
 				obj.anime.forEach(function(value){
 					
-					console.log(value.id);
+					//console.log(value.id);
 						request({url:'http://myanimelist.net/includes/ajax.inc.php?t=64&id='+value.id,
 								method: "GET",
 								proxy:'http://101.96.10.47:83'},
