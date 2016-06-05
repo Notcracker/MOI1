@@ -32,7 +32,7 @@
                     <div class="form-group" ng-class="{ 'has-error' : feedbackForm.query.$error.required && !feedbackForm.query.$pristine }">
                         <label for="query" class="col-sm-2 control-label">Search query:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="query" name="query" placeholder="Enter Nickname" ng-model="query" required>
+                            <input type="text" class="form-control" id="query" name="query" placeholder="Enter Nickname" ng-model="query.userName" required>
                     <!-- <span ng-show="feedbackForm.query.$error.required && !feedbackForm.query.$pristine" class="help-block">Your search query is required.</span> -->
                         </div>
                     </div>

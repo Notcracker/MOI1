@@ -7,7 +7,9 @@ var URL = require('url-parse');
 var request = require('request');
 var cheerio = require('cheerio');
 var mongoose = require('mongoose');
-	
+//var tr = require('tor-request');	
+
+
 var urldb = 'mongodb://localhost:27017/mal';
 var obj = {};
 var START_URL = null;
@@ -30,13 +32,12 @@ animelist.route('/')
 		.then(function(){
 			MongoClient.connect(urldb,function(err,db){
 				assert.equal(err,null);
-				console.log('Connected correctly to server');
+				console.log('Connected correctly to server',req.body.userName);
 				
 				var collection = db.collection('mally');
 
 					collection.find({'userName':req.body.userName}).toArray(function(err,arrra){
 						assert.equal(err,null);
-						console.log('VOID!');
 									if(!arrra[0]){
 
 											collection.insert(obj, function(err, result) {
@@ -134,12 +135,17 @@ function GetStats(obj) {
 				obj.anime.forEach(function(value){
 					
 					//console.log(value.id);
-						request({url:'http://myanimelist.net/includes/ajax.inc.php?t=64&id='+value.id,
-								method: "GET",
-								proxy:'http://101.96.10.47:83'},
+						request('http://myanimelist.net/includes/ajax.inc.php?t=64&id='+value.id,
+								//method: "GET",
+								//proxy:'http://51.254.106.69:80'
+								//timeout:10000
+							//},
 							function(error, response, body){
 								
-
+								
+								/*if (response.statusCode==429){
+									console.log(JSON.stringify(response.headers));
+								}*/
 								if (!error && response.statusCode == 200) {
 
 						            var $ = cheerio.load('<body>' + body + '</body>');
@@ -170,9 +176,7 @@ function GetStats(obj) {
 								console.log('resolve!')
 								resolve(obj);
 							}
-							if(response.statusCode==429){
-									console.log(l, response.statusCode)
-								};
+							
 
 						});
 
