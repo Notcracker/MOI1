@@ -3,7 +3,7 @@
 
 angular.module('malApp', ['ui.router','ngResource'])
 .config(function($stateProvider, $urlRouterProvider) {
-        $stateProvider
+     /*   $stateProvider
         
             // route for the search page
             .state('app', {
@@ -33,6 +33,21 @@ angular.module('malApp', ['ui.router','ngResource'])
 
             
     
-        $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('/');*/
     })
 ;
+
+angular.module('foundApp', ['ui.router','ngResource'])
+.config(function($stateProvider, $urlRouterProvider){
+    $stateProvider
+
+        .state('app',{
+             url:'/',
+                views: {
+                    'content': {
+                        templateUrl : 'views/search.html',
+                        controller  : 'searchController'
+                    }
+                }
+        })
+})
