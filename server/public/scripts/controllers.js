@@ -31,6 +31,6 @@ angular.module('malApp3', ['ui.router','ngResource'],function($locationProvider)
     	//console.log(typeof pId);
 	    $scope.dd = '';
 		animeFactory.load(pId).get(function(data){
-			$scope.dd = data.data1;
+			console.log(data.alist);
 		})
 	}]);
