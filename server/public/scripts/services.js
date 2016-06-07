@@ -8,7 +8,7 @@ angular.module('malApp')
             // Implement update feedBack
             searchfac.query1 = function () {
             	
-                return $resource(baseURL+'aList', null, {'post':{method:'POST'}});
+                return $resource(baseURL, null, {'post':{method:'POST'}});
             };
 
             return searchfac;

@@ -16,6 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(morgan('dev'));
+app.use('/',require('./search.js'))
 app.use('/aList',require('./animelist.js'))
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, hostname, function(){
