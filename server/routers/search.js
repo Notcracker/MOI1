@@ -39,16 +39,15 @@ search.route('/')
 				
 				var collection = db.collection('mally');
 
-					collection.find({'userName':req.body.userName}).toArray(function(err,arrra){
+					collection.find({'uName':req.body.userName}).toArray(function(err,arrra){
 						assert.equal(err,null);
-						console.log(obj);
 							if(!arrra[0]){
 
 								collection.insert(obj, function(err, result) {
 										assert.equal(err,null);		
 										
 										var name = req.body.userName;
-										collection.find({'userName':req.body.userName}).toArray(function(err,obj){
+										collection.find({'uName':req.body.userName}).toArray(function(err,obj){
 											if (err) throw err;
 											console.log('New user has been created!');
 											console.timeEnd('function');
@@ -82,7 +81,7 @@ module.exports = search;
 
 
 //helpers
-
+ var L = 0;
 
 function visitPage(url) {
 	return new Promise(function(resolve, reject){
@@ -95,18 +94,33 @@ function visitPage(url) {
 				 
 				 // Parse the document body
 				 var $ = cheerio.load(body, { xmlMode: true });
-				 obj.meanScore = 0;
-				 var L = 0;
-				 var userName = $('user_name').text();
+				 var uName = $('user_name').text();
 				 var userId = $('user_id').text();
-				 obj.userName= userName;
+				 var uWatching = Number($('user_watching').text());
+				 var uComleted = Number($('user_completed').text());
+				 var uOnhold = Number($('user_onhold').text());
+				 var uDropped = Number($('user_dropped').text());
+				 var uPTW = Number($('user_plantowatch').text());
+				 var uDSW = Number($('user_days_spent_watching').text());
+
+
+				 obj.uName= uName;
 				 obj._id = userId;
 				 m = userId;
+				 obj.meanScore = 0;
+				 obj.uWatching = uWatching;
+				 obj.uComleted = uComleted;
+				 obj.uOnhold = uOnhold;
+				 obj.uDropped = uDropped;
+				 obj.uPTW = uPTW;
+				 obj.uDSW = uDSW;
+				
+				
 				 obj['anime']=[];
 				 $('anime').each(function(i, element){
 				 	var id = $(this).children('series_animedb_id');
-				 	var allEp = $(this).children('series_episodes').text();
-				 	var watchedEp = $(this).children('my_watched_episodes').text();
+				 	var allEp = Number($(this).children('series_episodes').text());
+				 	var watchedEp = Number($(this).children('my_watched_episodes').text());
 				 	var myScore = Number($(this).children('my_score').text());
 				 	obj.anime.push({ url: baseUrl + '/anime/' + id.text(),
 				 		_id: id.text(),
@@ -122,13 +136,14 @@ function visitPage(url) {
 
 				 	if ((Number($(this).children('my_score').text()))!==0){
 				 		L = L+1;
-						obj.meanScore = (myScore + obj.meanScore)/L;
+						obj.meanScore = (myScore + obj.meanScore);
 						//console.log(meanScore);
 					
 					}
 
 
 				});
+
 				resolve(obj);
 							
 				 
@@ -139,62 +154,65 @@ function visitPage(url) {
 
 function GetStats(obj) {
 	return new Promise(function(resolve){
-				console.time('function')
+				console.time('function');
 				
 				var m = obj.anime;
 				var le= m.length;
-				
+				obj.meanScore = obj.meanScore/L;
 				var l = 0;
 				obj.anime.forEach(function(value){
 					
 					//console.log(value.id);
-					request('http://myanimelist.net/includes/ajax.inc.php?t=64&id='+value.id,
-							//method: "GET",
-							//proxy:'http://101.96.10.47:83'
-							//timeout:10000
-						//},
-						function(error, response, body){
-							
-							
-							console.log(response.statusCode);
-							if (!error && response.statusCode == 200) {
+						request('http://myanimelist.net/includes/ajax.inc.php?t=64&id='+value._id,
+								//method: "GET",
+								//proxy:'http://51.254.106.69:80'
+								//timeout:10000
+							//},
+							function(error, response, body){
+								
+								
+								/*if (response.statusCode==429){
+									console.log(JSON.stringify(response.headers, response.body));
+								}*/
+								if (!error && response.statusCode == 200) {
 
-					            var $ = cheerio.load('<body>' + body + '</body>');
-					            var $body = $('body');
+						            var $ = cheerio.load('<body>' + body + '</body>');
+						            var $body = $('body');
 
-					            $('body div').children().empty();
-					            var description = $('body div').text().trim();
-					            var keys = $('body span').text().split(':');
-					            keys.splice(-1, 1);
-					            $body.children().empty();
-					            var values = $body.text().trim().split('\n');
+						            $('body div').children().empty();
+						            var description = $('body div').text().trim();
+						            var keys = $('body span').text().split(':');
+						            keys.splice(-1, 1);
+						            $body.children().empty();
+						            var values = $body.text().trim().split('\n');
 
-					            
-					            value.description = description;
-					           
+						            
+						            value.description = description;
+						           
 
-					            for(var j = 0; j<keys.length; j++) {
-					                value[(keys[j].toLowerCase().trim())] = (values[j].trim());
-					                /*if ((keys[j].toLowerCase().trim())=='genres'){
-					                	value[(keys[j].toLowerCase().trim())] = values[j].trim().split(', ');
-					                } else {
-										value[(keys[j].toLowerCase().trim())] = (values[j].trim());
-					                }*/
-			            		}
+						            for(var j = 0; j<keys.length; j++) {
+						            	if (keys[j].toLowerCase().trim() == 'genres'){
+						            		value[(keys[j].toLowerCase().trim())] = values[j].trim().split(', ');
+						            	} else if (keys[j].toLowerCase().trim() == 'popularity'||keys[j].toLowerCase().trim() == 'ranked'||keys[j].toLowerCase().trim() == 'episodes'||keys[j].toLowerCase().trim()=='score'||keys[j].toLowerCase().trim() == 'members'){
+						            		value[(keys[j].toLowerCase().trim())] = Number(values[j].trim().replace(/\D/g,''));
+						            	} else {
+						                value[(keys[j].toLowerCase().trim())] = (values[j].trim());
+						            	}
+				            		}
+				            		
+				            		//console.log(l, le);
+				            		
 			            		
-			            		//console.log(l, le);
-			            		
-		            		console.log(value);
-				        }
-				        l = l +1;
-				      // console.log(l, le);
-				        if (l===le){
-							console.log('resolve!')
-							resolve(obj);
-						}
-						
+					        }
+					        l = l +1;
+					      // console.log(l, le);
+					        if (l===le){
+								console.log('resolve!')
+								resolve(obj);
+							}
+							
 
-					});
+						});
 
 
 				});
@@ -203,6 +221,4 @@ function GetStats(obj) {
 
 	});
 };	
-
-			
 		

@@ -51,10 +51,10 @@ var animeSchema = new Schema({
 		type: Number,
 		required: true
 	},ranked:{
-		type: String,
+		type: Number,
 		required: true
 	},popularity: {
-		type: String,
+		type: Number,
 		required: true
 	},members: {
 		type: Number,

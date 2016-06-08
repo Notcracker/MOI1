@@ -21,7 +21,7 @@ animelist.route('/details/:userName')
 
 		var collection = db.collection('mally');
 
-			collection.find({'userName':req.params.userName}).toArray(function(err,arrra){
+			collection.find({'uName':req.params.userName}).toArray(function(err,arrra){
 				assert.equal(err,null);
 				res.send(JSON.stringify({alist:arrra[0]}));
 			});
