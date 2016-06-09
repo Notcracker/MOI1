@@ -1,31 +1,29 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var MongoClient = require('mongodb').MongoClient,
-	assert = require('assert');
-var urldb = 'mongodb://localhost:27017/mal';
+
+var	assert = require('assert');
 
 var animelist = express.Router();
+var Anilists = require('../models/anilists');
 
 animelist.use(bodyParser.json());
 animelist.route('/:userName')
 .get(function(req,res,next){
 	console.log(req.params.userName);
-	res.sendFile('/home/miri/moi1/server/public/anime.html');
+	res.sendFile('/home/miri/moi1/server/public/found.html');
 
 })
 
 animelist.route('/details/:userName')
 .get(function(req,res,next){
-	MongoClient.connect(urldb,function(err,db){
-		assert.equal(err,null);
+	
+			
 
-		var collection = db.collection('mally');
-
-			collection.find({'uName':req.params.userName}).toArray(function(err,arrra){
-				assert.equal(err,null);
-				res.send(JSON.stringify({alist:arrra[0]}));
-			});
-	})
+		Anilists.find({'uName':req.params.userName},function(err,list){
+			assert.equal(err,null);
+			res.send(JSON.stringify({alist:list}));
+		});
+	
 })
 
 module.exports = animelist;

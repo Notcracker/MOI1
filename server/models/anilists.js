@@ -3,103 +3,109 @@ var Schema = mongoose.Schema;
 
 
 var animeSchema = new Schema({
-	myFinishDate: {
+	id: {
 		type: String,
 		required: true
+	}, myFinishDate: {
+		type: String,
+		required: [true,"myFinishDate"]
 	}, myStartDate: {
 		type: String,
-		required: true
+		required: [true,"myStartDate"]
 	}, url: {
 		type: String,
-		required: true
+		required: [true,"url"]
 	},myStatus:{
 		type: String,
-		required: true
+		required: [true,"myStatus"]
 	}, myScore:{
 		type: Number,
 		min: 1,
         max: 10,
-		required: true
+		required: [true,"myScore"]
 	}, seriesTitle:{
 		type: String,
-		required: true
+		required: [true,"seriesTitle"]
 	}, tags:{
 		type: String,
-		required: true
+		required: [true,"tags"]
 	}, watchedEp:{
 		type: Number,
-		required: true
+		required: [true,"watchedEp"]
 	}, allEp:{
 		type: Number,
-		required: true
+		required: [true,"allEp"]
 	},description: {
 		type: String,
-		required: true
-	},genres:{
-		type: Array,
+		required: [true,"description"]
+	},
+	genres:{
+		type: String,
 		required: true
 	},status: {
 		type: String,
-		required: true
+		required: [true,"status"]
 	},type:{
 		type: String,
-		required: true
+		required: [true,"type"]
 	},episodes: {
-		type: Number,
-		required: true
+		type: String,
+		required: [true,"episodes"]
 	},score:{
-		type: Number,
-		required: true
+		type: String,
+		required: [true,"score"]
 	},ranked:{
-		type: Number,
-		required: true
+		type: String,
+		required: [true,"ranked"]
 	},popularity: {
-		type: Number,
-		required: true
+		type: String,
+		required: [true,"popularity"]
 	},members: {
-		type: Number,
-		required: true
+		type: String,
+		required: [true,"members"]
 	}
 });
 
+
 var animelistSchema = new Schema({
-	anime: [animeSchema],
+	_id : {type: String, required: true},
+	anime: [],
 	meanScore: {
 		type: Number,
-		required: true
+		required: [true,"meanScore"]
 	},
 	uName: {
 		type: String,
-		required: true
+		required: [true,"uName"]
 	},
 	uWatching: {
 		type: Number,
-		required: true
+		required: [true,"uWatching"]
 	},
 	uCompleted: {
 		type: Number,
-		required: true
+		required: [true,"uCompleted"]
 	},
 	uOnhold: {
 		type: Number,
-		required: true
+		required: [true,"uOnhold"]
 	},
 	uDropped: {
 		type: Number,
-		required: true
+		required: [true,"uDropped"]
 	},
 	uPTW: {
 		type: Number,
-		required: true
+		required: [true,"uPTW"]
 	},
 	uDSW: {
 		type: Number,
-		required: true
+		required: [true,"uDSW"]
 	}
 
-},{timestamps: true})
+});
 
 //creating model
 
-var Anilists = mongoose.model('Anilist',animelistSchema);
+var Anilist = mongoose.model('Anilist',animelistSchema);
 module.exports = Anilist;

@@ -1,6 +1,17 @@
 'use strict';
 
-angular.module('confusionApp', ['ui.router','ngResource'])
+
+angular.module('malApp', ['ui.router','ngResource'])
+.config(function($stateProvider, $urlRouterProvider) {
+    
+    })
+;
+
+
+
+'use strict';
+
+angular.module('malApp3', ['ui.router','ngResource'])
 .config(function($stateProvider, $urlRouterProvider) {
         $stateProvider
         
@@ -30,15 +41,11 @@ angular.module('confusionApp', ['ui.router','ngResource'])
                 }
             })
         
-         
-         
+            
+
+          
+
     
         $urlRouterProvider.otherwise('/');
-    })
-;
-
-angular.module('malApp', ['ui.router','ngResource'])
-.config(function($stateProvider, $urlRouterProvider) {
-    
     })
 ;
