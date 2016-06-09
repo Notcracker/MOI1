@@ -3,11 +3,11 @@
 angular.module('confusionApp')
 
        .controller('animelistController', ['$scope', 'animeFactory', '$location', function($scope, animeFactory, $location){
-        var pId = $location.path().split("/")[2];//[3]||"Unknown";   
-        console.log(pId);
+        var  nick = $location.absUrl().split('?')[0].split('/')[4].slice(0,-1)//[3]||"Unknown";   
+        console.log(nick);
         //console.log(typeof pId);
         $scope.dd = '';
-        animeFactory.load(pId).get(function(data){
+        animeFactory.load(nick).get(function(data){
             console.log(data.alist[0]);
             $scope.dd = data.alist[0].uName; 
         })
