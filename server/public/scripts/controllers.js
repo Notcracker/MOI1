@@ -9,10 +9,42 @@ angular.module('confusionApp')
         $scope.dd = '';
         animeFactory.load(nick).get(function(data){
             console.log(data.alist[0]);
-            $scope.dd = data.alist[0].uName; 
-        })
+            $scope.dd = data.alist[0]; 
+        });
 
-    
+        $scope.animeOrder = 'seriesTitle';
+        $scope.filterBy = function(filter){
+            $scope.animeOrder = filter;
+        };
+        $scope.tab = 1;
+        $scope.filtText = '';
+
+        $scope.select = function(setTab) {
+            $scope.tab = setTab;
+            
+            if (setTab === 6) {
+                $scope.filtText = "ptw";
+            }
+            else if (setTab === 5) {
+                $scope.filtText = "dropped";
+            } 
+            else if (setTab === 2) {
+                $scope.filtText = "watching";
+            }
+            else if (setTab === 3) {
+                $scope.filtText = "completed";
+            }
+            else if (setTab === 4) {
+                $scope.filtText = "onhold";
+            }
+            else {
+                $scope.filtText = "";
+            }
+        };
+
+        $scope.isSelected = function (checkTab) {
+            return ($scope.tab === checkTab);
+        };
     }]);
 
 ;

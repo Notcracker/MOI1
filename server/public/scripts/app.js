@@ -24,8 +24,7 @@ angular.module('confusionApp', ['ui.router','ngResource'])
                 url:'mangalist',
                 views: {
                     'content@': {
-                        templateUrl : 'http://localhost:3000/views/mangalist.html',
-                        controller  : 'AboutController'                  
+                        templateUrl : 'http://localhost:3000/views/mangalist.html'                                           
                     }
                 }
             })

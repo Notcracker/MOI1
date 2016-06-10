@@ -90,7 +90,7 @@ function visitPage(url) {
 					// var uDropped = Number($('user_dropped').text());
 					// var uPTW = Number($('user_plantowatch').text());
 					// var uDSW = Number($('user_days_spent_watching').text());
-
+					
 
 					 obj.uName= $('user_name').text();
 					 obj._id = $('user_id').text();
@@ -106,6 +106,23 @@ function visitPage(url) {
 					
 					 obj['anime']=[];
 					 $('anime').each(function(i, element){
+					 	var myStatus;
+					 	if ( $(this).children('series_status').text()=== '6') {
+			                myStatus = "ptw";
+			            }
+			            else if ($(this).children('series_status').text() === '1') {
+			                myStatus = "watching";
+			            } 
+			            else if ($(this).children('series_status').text() === '2') {
+			                myStatus = "completed";
+			            }
+			            else if ($(this).children('series_status').text() === '3') {
+			                myStatus = "onhold";
+			            }
+			            else if ($(this).children('series_status').text() === '4') {
+			                myStatus = "dropped";
+			            
+			            }
 					 	var id = $(this).children('series_animedb_id');
 					 	var allEp = Number($(this).children('series_episodes').text());
 					 	var watchedEp = Number($(this).children('my_watched_episodes').text());
@@ -117,7 +134,7 @@ function visitPage(url) {
 					 		tags: $(this).children('my_tags').text(),
 					 		myStartDate: $(this).children('my_start_date').text(),
 					 		myFinishDate: $(this).children('my_finish_date').text(),
-					 		myStatus: $(this).children('series_status').text(),
+					 		myStatus: myStatus,
 					 		allEp: allEp,
 					 		watchedEp: watchedEp
 					 	});
@@ -155,6 +172,7 @@ function GetStats(obj) {
 												//proxy:'http://51.254.106.69:80'
 												//timeout:10000
 											//},
+
 											function(error, response, body){
 												
 												
