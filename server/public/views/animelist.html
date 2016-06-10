@@ -21,13 +21,14 @@
                                     <div class='col-md-3'>
                                         <h3>Completed: {{dd.uCompleted}}</h3>
                                         <h3>Watching: {{dd.uWatching}}</h3>
-                                        <h3>Onhold: {{dd.uOnhold}}</h3>
+                                        <h3>On-Hold: {{dd.uOnhold}}</h3>
                                         <h3>Dropped: {{dd.uDropped}}</h3>
                                         <h3>Plan to watch: {{dd.uPTW}}</h3>
                                     </div>
                                     <div class='col-md-5'>
                                         <h3>Mean score: {{dd.meanScore}}</h3>
                                         <h3>Days spended watching: {{dd.uDSW}}</h3>
+                                        <h3>All episodes: {{dd.watchedEpsAll}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -65,19 +66,17 @@
                                         <th><a ng-click='filterBy("-tags")'>Tags</th>
                                         <th><a ng-click="filterBy('-myScore')">User's Score</th>
                                         <th><a ng-click='filterBy("-score")'>Mean score of users</th>
-                                        <th>status</th>
                                       </tr>
                                     </thead>  
                                    <tbody>   
-                                      <tr ng-repeat="a in dd.anime | orderBy:animeOrder | filter:a.myStatus">
-                                        <td><a href="http://myanimelist.net/anime/{{a.id}}">{{a.seriesTitle}}</a></td>
+                                      <tr ng-repeat="a in dd.anime | orderBy:animeOrder | filter:filtText">
+                                        <td><a href="http://myanimelist.net/anime/{{a._id}}">{{a.seriesTitle}}</a></td>
                                         <td>{{a.type}}</td>
                                         <td>{{a.watchedEp}}</td>
                                         <td>{{a.allEp}}</td>
                                         <td>{{a.tags}}</td>
                                         <td>{{a.myScore}}</td>
                                         <td>{{a.score}}</td>
-                                        <td>{{a.myStatus}}</td>
                                       </tr> 
                                     </tbody>
                                 </table>

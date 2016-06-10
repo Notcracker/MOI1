@@ -23,8 +23,7 @@ search.route('/')
 	res.sendFile('/home/miri/moi1/server/public/index.html')
 })
 .post(function(req,res,next){
-	console.time('function');
-				
+	console.time('function');	
 		console.log(req.body.userName);
 		START_URL = "http://myanimelist.net/malappinfo.php?u="+req.body.userName+"&status=all&type=anime";
 		url = new URL(START_URL);
@@ -38,7 +37,7 @@ search.route('/')
 				.then(GetStats)
 				.then(function(){
 					
-		
+						
 						Anilist.create(obj, function(err, result) {
 							assert.equal(null,err);		
 								
@@ -69,8 +68,8 @@ module.exports = search;
 
 
 //helpers
- var L = 0;
 
+var L = 0;
 function visitPage(url) {
 	return new Promise(function(resolve, reject){
 						
@@ -102,24 +101,25 @@ function visitPage(url) {
 					 obj.uDropped = Number($('user_dropped').text());
 					 obj.uPTW = Number($('user_plantowatch').text());
 					 obj.uDSW = Number($('user_days_spent_watching').text());
-					
+					 obj.watchedEpsAll = 0;
 					
 					 obj['anime']=[];
+					 console.log($('anime').length);
 					 $('anime').each(function(i, element){
 					 	var myStatus;
-					 	if ( $(this).children('series_status').text()=== '6') {
+					 	if ( $(this).children('my_status').text()=== '6') {
 			                myStatus = "ptw";
 			            }
-			            else if ($(this).children('series_status').text() === '1') {
+			            else if ($(this).children('my_status').text() === '1') {
 			                myStatus = "watching";
 			            } 
-			            else if ($(this).children('series_status').text() === '2') {
+			            else if ($(this).children('my_status').text() === '2') {
 			                myStatus = "completed";
 			            }
-			            else if ($(this).children('series_status').text() === '3') {
+			            else if ($(this).children('my_status').text() === '3') {
 			                myStatus = "onhold";
 			            }
-			            else if ($(this).children('series_status').text() === '4') {
+			            else if ($(this).children('my_status').text() === '4') {
 			                myStatus = "dropped";
 			            
 			            }
@@ -127,8 +127,9 @@ function visitPage(url) {
 					 	var allEp = Number($(this).children('series_episodes').text());
 					 	var watchedEp = Number($(this).children('my_watched_episodes').text());
 					 	var myScore = Number($(this).children('my_score').text());
+					 	obj.watchedEpsAll = obj.watchedEpsAll + Number($(this).children('my_watched_episodes').text());
 					 	obj.anime.push({ url: baseUrl + '/anime/' + id.text(),
-					 		id: id.text(),
+					 		_id: id.text(),
 					 		seriesTitle: $(this).children('series_title').text(),
 					 		myScore: myScore,
 					 		tags: $(this).children('my_tags').text(),
@@ -139,18 +140,21 @@ function visitPage(url) {
 					 		watchedEp: watchedEp
 					 	});
 
-					 	if ((Number($(this).children('my_score').text()))!==0){
+					 	if (myScore!==0){
 					 		L = L+1;
 							obj.meanScore = (myScore + obj.meanScore);
-							//console.log(meanScore);
-						
+						}
+						if ($('anime').length===(i+1)){
+							console.log('watchedepsAll',obj.watchedEpsAll)
+							console.log('RESOLVE')
+							resolve(obj);
 						}
 
-
 					});
-
-					resolve(obj);
-							
+					
+					
+					
+					
 				 
 				});
 	
@@ -162,17 +166,20 @@ function GetStats(obj) {
 	return new Promise(function(resolve){
 				
 				
-				obj.meanScore = obj.meanScore/L;
-				
+					
 					for (var i = 0; i<obj.anime.length; i++){
 						(function(i){
 							setTimeout(function(){
-								request('http://myanimelist.net/includes/ajax.inc.php?t=64&id='+obj.anime[i].id,
+									if (obj.anime[i].myScore!==0){
+								 		L = L+1;
+										obj.meanScore = (obj.anime[i].myScore + obj.meanScore);
+									}
+								request('http://myanimelist.net/includes/ajax.inc.php?t=64&id='+obj.anime[i]._id,
 												//method: "GET",
 												//proxy:'http://51.254.106.69:80'
 												//timeout:10000
 											//},
-
+											
 											function(error, response, body){
 												
 												
@@ -208,7 +215,7 @@ function GetStats(obj) {
 									        //l = l +1;
 									      // console.log(l, le);
 									        if (i===obj.anime.length-1){
-												console.log('resolve!')
+												obj.meanScore = obj.meanScore/L;
 												resolve(obj);
 											}
 											
