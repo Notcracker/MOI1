@@ -9,10 +9,10 @@ angular.module('confusionApp', ['ui.router','ngResource'])
                 url:'/',
                 views: {
                     'header': {
-                        templateUrl : 'http://localhost:3000/views/header.html',
+                        templateUrl : 'http://178.70.89.41:3000/views/header.html',
                     },
                     'content': {
-                        templateUrl : 'http://localhost:3000/views/animelist.html',
+                        templateUrl : 'http://178.70.89.41:3000/views/animelist.html',
                         controller  : 'animelistController'
                     }
                 }
@@ -24,7 +24,7 @@ angular.module('confusionApp', ['ui.router','ngResource'])
                 url:'mangalist',
                 views: {
                     'content@': {
-                        templateUrl : 'http://localhost:3000/views/mangalist.html'                                           
+                        templateUrl : 'http://178.70.89.41:3000/views/mangalist.html'                                           
                     }
                 }
             })

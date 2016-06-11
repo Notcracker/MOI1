@@ -60,7 +60,7 @@ angular.module('malApp', ['ui.router','ngResource'])
             console.log($scope.query);
             searchFactory.query1().post($scope.query,function(data){
                 console.log(data.userName2);
-                window.location.replace('http://localhost:3000/aList' + '/' + data.userName2);
+                window.location.replace('http://178.70.89.41:3000/aList' + '/' + data.userName2);
             });
         }
         

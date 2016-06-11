@@ -2,7 +2,7 @@
 
 
 angular.module('confusionApp')
-        .constant('baseURL','http://localhost:3000/')
+        .constant('baseURL','http://178.70.89.41:3000/')
         .factory('animeFactory', ['$resource','baseURL', function($resource,baseURL){
             var anifac = {};
             anifac.load = function(name){
@@ -13,7 +13,7 @@ angular.module('confusionApp')
 
 
 angular.module('malApp')
-        .constant("baseURL","http://localhost:3000/")
+        .constant("baseURL","http://178.70.89.41:3000/")
         .factory('searchFactory', ['$resource', 'baseURL', function($resource,baseURL) {
             var searchfac = {};
 

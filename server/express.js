@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 	
 var urldb = 'mongodb://localhost:27017/mal';
 
-var hostname = 'localhost';
+var hostname = '0.0.0.0';
 var port = 3000;
 
 
