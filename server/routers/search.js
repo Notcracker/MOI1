@@ -140,9 +140,11 @@ function visitPage(url) {
 					 		watchedEp: watchedEp
 					 	});
 
-					 	if (myScore!==0){
+					 	if ((Number($(this).children('my_score').text()))!==0){
 					 		L = L+1;
 							obj.meanScore = (myScore + obj.meanScore);
+							//console.log(meanScore);
+						
 						}
 						if ($('anime').length===(i+1)){
 							console.log('watchedepsAll',obj.watchedEpsAll)
@@ -166,14 +168,12 @@ function GetStats(obj) {
 	return new Promise(function(resolve){
 				
 				
+				obj.meanScore = obj.meanScore/L;
 					
 					for (var i = 0; i<obj.anime.length; i++){
 						(function(i){
 							setTimeout(function(){
-									if (obj.anime[i].myScore!==0){
-								 		L = L+1;
-										obj.meanScore = (obj.anime[i].myScore + obj.meanScore);
-									}
+									
 								request('http://myanimelist.net/includes/ajax.inc.php?t=64&id='+obj.anime[i]._id,
 												//method: "GET",
 												//proxy:'http://51.254.106.69:80'
@@ -215,7 +215,6 @@ function GetStats(obj) {
 									        //l = l +1;
 									      // console.log(l, le);
 									        if (i===obj.anime.length-1){
-												obj.meanScore = obj.meanScore/L;
 												resolve(obj);
 											}
 											
