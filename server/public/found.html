@@ -2,7 +2,30 @@
 <html lang="en" ng-app="confusionApp">
 
 <head>
- 
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Work',     11],
+          ['Eat',      2],
+          ['Commute',  2],
+          ['Watch TV', 2],
+          ['Sleep',    7]
+        ]);
+
+        var options = {
+          title: 'My Daily Activities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,12 +59,13 @@
     
 
 <!-- build:js scripts/main.js -->
+    
     <script src="../bower_components/angular/angular.min.js"></script>
     <script src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="../bower_components/angular-resource/angular-resource.min.js"></script>
-    <script src="http://178.70.89.41:3000/scripts/app.js"></script>
-    <script src="http://178.70.89.41:3000/scripts/controllers.js"></script>
-    <script src="http://178.70.89.41:3000/scripts/services.js"></script>
+    <script src="/scripts/app.js"></script>
+    <script src="/scripts/controllers.js"></script>
+    <script src="/scripts/services.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <!-- endbuild -->

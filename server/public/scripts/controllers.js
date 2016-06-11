@@ -7,7 +7,8 @@ angular.module('confusionApp')
         console.log(nick);
         //console.log(typeof pId);
         $scope.dd = '';
-        animeFactory.load(nick).get(function(data){
+        var hostname = window.location.hostname;
+        animeFactory.load(nick,hostname).get(function(data){
             console.log(data.alist[0]);
             $scope.dd = data.alist[0]; 
         });
@@ -58,9 +59,10 @@ angular.module('malApp', ['ui.router','ngResource'])
 
         $scope.sendQuery = function(){
             console.log($scope.query);
-            searchFactory.query1().post($scope.query,function(data){
+            var host = window.location.hostname;
+            searchFactory.query1(host).post($scope.query,function(data){
                 console.log(data.userName2);
-                window.location.replace('http://178.70.89.41:3000/aList' + '/' + data.userName2);
+                window.location.replace('http://'+ host +':3000/aList' + '/' + data.userName2);
             });
         }
         

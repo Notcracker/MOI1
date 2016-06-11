@@ -2,25 +2,23 @@
 
 
 angular.module('confusionApp')
-        .constant('baseURL','http://178.70.89.41:3000/')
-        .factory('animeFactory', ['$resource','baseURL', function($resource,baseURL){
+        .factory('animeFactory', ['$resource', function($resource){
             var anifac = {};
-            anifac.load = function(name){
-                return $resource(baseURL+'aList/details/'+name, null, {'get':{mathod:'GET'}});
+            anifac.load = function(name,hostname){
+                return $resource('http://'+hostname+':3000'+'/aList/details/'+name, null, {'get':{mathod:'GET'}});
             }
             return anifac;
         }])
 
 
 angular.module('malApp')
-        .constant("baseURL","http://178.70.89.41:3000/")
-        .factory('searchFactory', ['$resource', 'baseURL', function($resource,baseURL) {
+        .factory('searchFactory', ['$resource', function($resource) {
             var searchfac = {};
 
             // make query
-            searchfac.query1 = function () {
+            searchfac.query1 = function (host) {
                 
-                return $resource(baseURL, null, {'post':{method:'POST'}});
+                return $resource('http://'+host+':3000', null, {'post':{method:'POST'}});
             };
 
             return searchfac;
