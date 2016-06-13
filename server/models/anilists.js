@@ -70,6 +70,10 @@ var animeSchema = new Schema({
 var animelistSchema = new Schema({
 	_id : {type: String, required: true},
 	anime: [],
+	types: {
+		type: Object,
+		required: true
+	},
 	watchedEpsAll: {
 		type: Number,
 		required: true

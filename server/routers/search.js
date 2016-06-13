@@ -69,7 +69,6 @@ module.exports = search;
 
 //helpers
 
-var L = 0;
 function visitPage(url) {
 	return new Promise(function(resolve, reject){
 						
@@ -140,12 +139,6 @@ function visitPage(url) {
 					 		watchedEp: watchedEp
 					 	});
 
-					 	if ((Number($(this).children('my_score').text()))!==0){
-					 		L = L+1;
-							obj.meanScore = (myScore + obj.meanScore);
-							//console.log(meanScore);
-						
-						}
 						if ($('anime').length===(i+1)){
 							console.log('watchedepsAll',obj.watchedEpsAll)
 							console.log('RESOLVE')
@@ -166,12 +159,23 @@ function visitPage(url) {
 function GetStats(obj) {
 	
 	return new Promise(function(resolve){
-				
-				
-				obj.meanScore = obj.meanScore/L;
-					
+				var L = 1;
+				obj.types = {
+					'TV':0,
+					'Movie':0,
+					'OVA':0,
+					'Special':0,
+					'ONA':0
+				};
 					for (var i = 0; i<obj.anime.length; i++){
 						(function(i){
+
+					 	if (obj.anime[i].myScore!==0){
+					 		L = L+1;
+							obj.meanScore = (obj.anime[i].myScore + obj.meanScore);
+							console.log(L);
+						
+							}
 							setTimeout(function(){
 									
 								request('http://myanimelist.net/includes/ajax.inc.php?t=64&id='+obj.anime[i]._id,
@@ -204,7 +208,35 @@ function GetStats(obj) {
 										            
 										            
 										            for(var j = 0; j<keys.length; j++) {
-										            	obj.anime[i][(keys[j].toLowerCase().trim())] = (values[j].trim());
+										            	if (keys[j].toLowerCase().trim()==='type'){
+
+										            		switch(values[j].trim()) {
+															    case 'TV':
+															        obj.types['TV'] = obj.types['TV'] + 1;
+															        break;
+															    case 'Movie':
+															        obj.types['Movie'] = obj.types['Movie'] + 1;
+															        break;
+															    case 'OVA':
+															        obj.types['OVA'] = obj.types['OVA'] + 1;
+															        break;
+															    case 'Special':
+															        obj.types['Special'] = obj.types['Special'] + 1;
+															        break;
+															    case 'ONA':
+															        obj.types['ONA'] = obj.types['ONA'] + 1;
+															        break;
+															 };
+															 obj.anime[i][(keys[j].toLowerCase().trim())] = (values[j].trim());
+
+															} else if (keys[j].toLowerCase().trim()==='genres'){
+																obj.anime[i][(keys[j].toLowerCase().trim())] = (values[j].trim()).split(', ');
+															} else {
+																obj.anime[i][(keys[j].toLowerCase().trim())] = (values[j].trim());
+															}
+																
+														
+																									          
 								            		}
 								            		
 								            		//console.log(l, le);
@@ -215,6 +247,11 @@ function GetStats(obj) {
 									        //l = l +1;
 									      // console.log(l, le);
 									        if (i===obj.anime.length-1){
+									        	
+									        		obj.meanScore = obj.meanScore/(L-1);
+									        		console.log(obj.meanScore);
+									        
+									    
 												resolve(obj);
 											}
 											

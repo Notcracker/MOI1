@@ -1,5 +1,5 @@
 'use strict';
-angular.module('confusionApp', ['ui.router','ngResource'])
+angular.module('confusionApp', ['ui.router','ngResource','chart.js'])
 .config(function($stateProvider, $urlRouterProvider) {
         $stateProvider
        
